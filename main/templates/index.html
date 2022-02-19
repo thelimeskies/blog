@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% load static %}
+
+    {% block title %}
+        <title>Home - Spurgeon</title>
+    {% endblock title %}
+
+    {% block body %}
+        <!-- # site-content
+        ================================================== -->
+        <section id="content" class="s-content">
+
+            <!-- hero -->
+            <div class="hero">
+
+                <div class="hero__slider swiper-container">
+
+                    <div class="swiper-wrapper">
+                        {% for content in object_list %}
+                        {% if content.featured %}
+                        <article class="hero__slide swiper-slide">
+                            <div class="hero__entry-image" style="background-image: url('{{ content.thumb_image.url }}');"></div>
+                            <div class="hero__entry-text">
+                                <div class="hero__entry-text-inner">
+                                    <div class="hero__entry-meta">
+                                        <span class="cat-links">
+                                            <a href="category.html">{% for category in content.category.all %}{{ category.name }}{% endfor %}</a> 
+                                        </span>
+                                    </div>
+                                    <h2 class="hero__entry-title">
+                                        <a href="single-standard.html">
+                                            {{ content.title }}
+                                        </a>
+                                    </h2>
+                                    <p class="hero__entry-desc">
+                                    {{ content.article }}
+                                    </p>
+                                    <a class="hero__more-link" href="single-standard.html">Read More</a>
+                                </div>
+                            </div>
+                        </article>
+                        {% endif %}
+                        {% endfor %}
+                    </div> <!-- swiper-wrapper -->
+
+                    <div class="swiper-pagination"></div>
+    
+                </div> <!-- end hero slider -->
+
+                <a href="#bricks" class="hero__scroll-down smoothscroll">
+                    <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.25 6.75L4.75 12L10.25 17.25"></path>
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.25 12H5"></path>
+                    </svg>
+                    <span>Scroll</span>
+                </a>
+
+            </div> <!-- end hero -->
+
+
+            <!--  masonry -->
+            <div id="bricks" class="bricks">
+
+                <div class="masonry">
+
+                    <div class="bricks-wrapper" data-animate-block>
+
+                        <div class="grid-sizer"></div>
+                        {% for object in object_list %}
+                        <article class="brick entry" data-animate-el>
+        
+                            <div class="entry__thumb">
+                                <a href="single-standard.html" class="thumb-link">
+                                    <img src="{{ object.thumb_image.url }}"
+                                        srcset="{{ object.thumb_image.url }} 1x, {{ object.thumb_image2x.url }} 2x" alt="">
+                                </a>
+                            </div> <!-- end entry__thumb -->
+        
+                            <div class="entry__text">
+                                <div class="entry__header">
+                                    <div class="entry__meta">
+                                        <span class="cat-links">
+                                            <a href="#">{% for category in object.category.all %}{{ category.name }}{% endfor %}</a>
+                                        </span>
+                                        <span class="byline">
+                                            By:
+                                            <a href="#0">{{ object.author.username }}</a>
+                                        </span>
+                                    </div>
+                                    <h1 class="entry__title"><a href="single-standard.html">{{ object.title }}</a></h1>
+                                 </div>
+                                <div class="entry__excerpt">
+                                    <p>
+                                    {{ object.article }}
+                                    </p>
+                                </div>
+                                <a class="entry__more-link" href="{{ object.get_absolute_url }}">Read More</a>
+                            </div> <!-- end entry__text -->
+                        
+                        </article> <!-- end article -->
+                        {% endfor %}
+
+                        
+                    </div> <!-- end bricks-wrapper -->
+
+                </div> <!-- end masonry-->
+
+
+                <!-- pagination -->
+                {% if is_paginated %}
+                <div class="row pagination">
+                    <div class="column lg-12">
+                        <nav class="pgn">
+                            <ul>
+                                {% if page_obj.has_previous %}
+                                <li>
+                                    <a class="pgn__prev" href="?page={{ page_obj.previous_page_number }}">
+                                        <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.25 6.75L4.75 12L10.25 17.25"></path>
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.25 12H5"></path>
+                                        </svg>
+                                    </a>
+                                </li>
+                                {% endif %}
+                                {% for i in paginator.page_range %}
+                                    {% if page_obj.number == i %}
+                                        <li><span class="pgn__num current">{{ i }}</span></li>
+                                    {% else %}
+                                        <li><a class="pgn__num" href="?page={{ i }}">{{ i }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if page_obj.has_next %}
+                                <li>
+                                    <a class="pgn__next" href="?page={{ page_obj.next_page_number }}">
+                                        <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.75 6.75L19.25 12L13.75 17.25"></path>
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 12H4.75"></path>
+                                        </svg>
+                                    </a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav> <!-- end pgn -->
+                    </div> <!-- end column -->
+                </div> <!-- end pagination -->
+                {% endif %}
+
+            </div> <!-- end bricks -->
+
+        </section> <!-- end s-content -->
+    {% endblock body %}
